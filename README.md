@@ -66,3 +66,35 @@ $ python3 main.py pytest
 
 ## using tox
 
+Example tox.ini:
+```ini
+[base]
+name = module_name
+
+[tox]
+envlist =
+    py39
+    py310
+
+[testenv]
+deps = -rrequirements-dev.txt
+commands = python3 main.py pytest
+```
+
+Example requirements-dev.txt:
+```shell
+git+https://git.oddbit.org/OddBit/pokie.git
+git+https://git.oddbit.org/OddBit/pytest-pokie.git
+pytest==7.1.2
+pytest-testdox==3.0.1
+pytest-cov==3.0.0
+coverage==6.4.4
+flake8==5.0.4
+setuptools~=60.0.0
+tox==3.21.4
+```
+
+Running with tox:
+```shell
+$ tox -e py310
+```
