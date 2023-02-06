@@ -5,6 +5,23 @@ Pytest plugin to run tests on pokie applications
 The pytest-pokie plugin extracts the pokie-based Flask application from the global namespace, and exposes a set
 of predefined fixtures for pokie structures.
 
+Note: Currently, only PostgreSQL is supported; the configured database user must have database creation/drop privileges;
+
+## configuration parameters
+
+| Parameter            | Description                                                         |
+|----------------------|---------------------------------------------------------------------|
+| CFG_TEST_DB_NAME     | PostgreSQL test database name                                       |
+| CFG_TEST_DB_HOST     | PostgreSQL host                                                     |
+| CFG_TEST_DB_PORT     | PostgreSQL port                                                     |
+| CFG_TEST_DB_USER     | PostgreSQL user                                                     |
+| CFG_TEST_DB_PASSWORD | PostgreSQL password                                                 |
+| CFG_TEST_DB_SSL      | if True, enforces SSL                                               |
+| CFG_TEST_SHARE_CTX      | if False, create a new application instance between tests (default) |
+| CFG_TEST_DB_REUSE | if False, drops and recreates the database between tests (default)  |
+| CFG_TEST_SKIP_MIGRATIONS | if False, runs migrations when creating the database                |
+| CFG_TEST_SKIP_FIXTURES | if False, runs fixtures when creating the database                  |
+
 ## avaliable fixtures
 
 Note: fixtures depend on the predefined values for the different DI constants as specified on the pokie.constants
@@ -48,6 +65,7 @@ $
 ```
 
 The scaffold structure is similar to the common pytest usage:
+
 ```shell
 some_module/
   (...)
@@ -60,6 +78,7 @@ tests/
 ```
 
 And to run the tests:
+
 ```shell
 $ python3 main.py pytest
 ```
@@ -67,6 +86,7 @@ $ python3 main.py pytest
 ## using tox
 
 Example tox.ini:
+
 ```ini
 [base]
 name = module_name
@@ -82,6 +102,7 @@ commands = python3 main.py pytest
 ```
 
 Example requirements-dev.txt:
+
 ```shell
 git+https://git.oddbit.org/OddBit/pokie.git
 git+https://git.oddbit.org/OddBit/pytest-pokie.git
@@ -95,6 +116,7 @@ tox==3.21.4
 ```
 
 Running with tox:
+
 ```shell
 $ tox -e py310
 ```
