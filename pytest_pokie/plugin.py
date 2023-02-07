@@ -62,33 +62,40 @@ def pokie_factory():
     return app, factory
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def pokie_config(pokie_app):
     """
     Application config fixture
     """
-    return pokie_app.di.get(DI_CONFIG)
+    yield pokie_app.di.get(DI_CONFIG)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def pokie_di(pokie_app):
     """
     Application Di fixture
     """
-    return pokie_app.di
+    yield pokie_app.di
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
+def pokie_db(pokie_app):
+    """
+    Database Connection fixture
+    """
+    yield pokie_app.di.get(DI_DB)
+
+
+@pytest.fixture()
 def pokie_service_manager(pokie_app):
     """
     Service Manager fixture
     """
-    return pokie_app.di.get(DI_SERVICES)
+    yield pokie_app.di.get(DI_SERVICES)
 
 
 @pytest.fixture()
 def pokie_client(pokie_app):
-    print("FLASK CLIENT")
     yield pokie_app.test_client()
 
 
@@ -99,7 +106,6 @@ def pokie_app(request, pokie_factory):
 
     Pokie config parameters are extracted from TestConfigTemplate
     """
-    print(">> POKIE APP")
     app, factory = pokie_factory
     cfg = app.di.get(DI_CONFIG)
 
@@ -123,6 +129,11 @@ def pokie_app(request, pokie_factory):
     if not cfg.get(CFG_TEST_SHARE_CTX):
         # if context isn't shared, create whole new application
         _, app = factory()
+
+    # if db management is disabled, skip db management altogether
+    if not cfg.get(CFG_TEST_MANAGE_DB):
+        yield app
+        return
 
     # -- db stuff
     test_db = cfg.get(CFG_TEST_DB_NAME, "test_pokie")
@@ -170,7 +181,7 @@ def _init_test_db(app, test_db, reuse_db, skip_migrations, skip_fixtures):
     conn = _test_db_connection(app, None)
     mgr = conn.metadata()
     db_exists = mgr.database_exists(test_db)
-    if not reuse_db:
+    if db_exists and not reuse_db:
         mgr.drop_database(test_db)
         db_exists = False
 

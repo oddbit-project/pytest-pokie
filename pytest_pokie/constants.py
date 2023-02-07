@@ -19,6 +19,7 @@ CFG_TEST_DB_USER = "test_db_user"
 CFG_TEST_DB_PASSWORD = "test_db_password"
 CFG_TEST_DB_SSL = "test_db_ssl"
 
+CFG_TEST_MANAGE_DB = "test_manage_db"
 CFG_TEST_SHARE_CTX = "test_share_ctx"
 CFG_TEST_DB_REUSE = "test_db_reuse"
 CFG_TEST_SKIP_MIGRATIONS = "test_skip_migrations"

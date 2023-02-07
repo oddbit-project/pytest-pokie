@@ -17,24 +17,85 @@ Note: Currently, only PostgreSQL is supported; the configured database user must
 | CFG_TEST_DB_USER     | PostgreSQL user                                                     |
 | CFG_TEST_DB_PASSWORD | PostgreSQL password                                                 |
 | CFG_TEST_DB_SSL      | if True, enforces SSL                                               |
+| CFG_TEST_MANAGE_DB      | if False, no db is managed via pytest-pokie                         |
 | CFG_TEST_SHARE_CTX      | if False, create a new application instance between tests (default) |
 | CFG_TEST_DB_REUSE | if False, drops and recreates the database between tests (default)  |
 | CFG_TEST_SKIP_MIGRATIONS | if False, runs migrations when creating the database                |
 | CFG_TEST_SKIP_FIXTURES | if False, runs fixtures when creating the database                  |
+
+## application lifecycle
+
+**CFG_TEST_SHARE_CTX** == False (default)
+
+Each test is run with a separate application instance; the application is bootstrapped at each test, by using
+the existing application factory.
+
+**CFG_TEST_SHARE_CTX** == True
+
+All tests are run with the same pokie FlaskApplication and Flask instance; services, events, etc. will be managed
+and cached as in a production run.
+
+## database management options
+
+Please note: The credentials provided to the test database **must** have enough privileges for the required operations,
+such as creating and dropping databases.
+
+
+**CFG_TEST_MANAGE_DB** == False (default)
+
+if CFG_TEST_MANAGE_DB is False, database management is completely ignored, and available db connection is the regular
+application connection. All database test configurations are ignored. 
+
+With this mode, it is up to the developer to ensure a clean state between database runs.
+
+
+**CFG_TEST_MANAGE_DB** == True
+
+If CFG_TEST_MANAGE_DB is True, pytest-pokie will manage the database connection using the available test credentials.
+The global database connection is replaced with the test connection, and fixtures and migrations may be executed between
+tests.
+
+**CFG_TEST_DB_REUSE** == False (default)
+
+if CFG_TEST_DB_REUSE is False, pytest-pokie will attempt to drop and recreate the test database between each test.
+
+**CFG_TEST_DB_REUSE** == True
+
+if CFG_TEST_DB_REUSE is True, pytest-pokie will not drop the testing database if exists. If it doesn't exist, it
+will attempt to create the database and optionally run migrations and fixtures, depending on CFG_TEST_SKIP_MIGRATIONS and
+CFG_TEST_SKIP_FIXTURES values.
+
+
+**CFG_TEST_SKIP_MIGRATIONS** == False (default)
+
+Existing SQL migrations will be run when the database is recreated.
+
+**CFG_TEST_SKIP_MIGRATIONS** == True
+
+Existing SQL migrations are ingored, even if the database is recreated.
+
+**CFG_TEST_SKIP_FIXTURES** == False (default)
+
+Existing fixtures will be run when the database is recreated.
+
+**CFG_TEST_SKIP_FIXTURES** == True
+
+Existing fixtures are ingored, even if the database is recreated.
+
+
 
 ## avaliable fixtures
 
 Note: fixtures depend on the predefined values for the different DI constants as specified on the pokie.constants
 file.
 
-|Fixture| Description|
-|---|--------------------------|
-|pokie_app| Pokie Application object|
-|pokie_flask| Pokie Flask object|
-|pokie_di| Pokie Di object|
-|pokie_config|Pokie Config object|
-|pokie_db|Pokie Database client|
-|pokie_client| Flask test client| 
+|Fixture| Description          |
+|---|----------------------|
+|pokie_app| Pokie Flask object   |
+|pokie_config| Pokie Config object  |
+|pokie_di| Pokie Di object      |
+|pokie_db| Pokie Database client |
+|pokie_client| Flask test client    | 
 
 ## writing tests for pokie applications
 
