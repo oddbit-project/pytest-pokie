@@ -25,12 +25,12 @@ Note: Currently, only PostgreSQL is supported; the configured database user must
 
 ## application lifecycle
 
-**CFG_TEST_SHARE_CTX** == False (default)
+#### **CFG_TEST_SHARE_CTX** == False (default)
 
 Each test is run with a separate application instance; the application is bootstrapped at each test, by using
 the existing application factory.
 
-**CFG_TEST_SHARE_CTX** == True
+#### **CFG_TEST_SHARE_CTX** == True
 
 All tests are run with the same pokie FlaskApplication and Flask instance; services, events, etc. will be managed
 and cached as in a production run.
@@ -41,7 +41,7 @@ Please note: The credentials provided to the test database **must** have enough 
 such as creating and dropping databases.
 
 
-**CFG_TEST_MANAGE_DB** == False (default)
+#### **CFG_TEST_MANAGE_DB** == False (default)
 
 if CFG_TEST_MANAGE_DB is False, database management is completely ignored, and available db connection is the regular
 application connection. All database test configurations are ignored. 
@@ -49,36 +49,36 @@ application connection. All database test configurations are ignored.
 With this mode, it is up to the developer to ensure a clean state between database runs.
 
 
-**CFG_TEST_MANAGE_DB** == True
+#### **CFG_TEST_MANAGE_DB** == True
 
 If CFG_TEST_MANAGE_DB is True, pytest-pokie will manage the database connection using the available test credentials.
 The global database connection is replaced with the test connection, and fixtures and migrations may be executed between
 tests.
 
-**CFG_TEST_DB_REUSE** == False (default)
+#### **CFG_TEST_DB_REUSE** == False (default)
 
 if CFG_TEST_DB_REUSE is False, pytest-pokie will attempt to drop and recreate the test database between each test.
 
-**CFG_TEST_DB_REUSE** == True
+#### **CFG_TEST_DB_REUSE** == True
 
 if CFG_TEST_DB_REUSE is True, pytest-pokie will not drop the testing database if exists. If it doesn't exist, it
 will attempt to create the database and optionally run migrations and fixtures, depending on CFG_TEST_SKIP_MIGRATIONS and
 CFG_TEST_SKIP_FIXTURES values.
 
 
-**CFG_TEST_SKIP_MIGRATIONS** == False (default)
+#### **CFG_TEST_SKIP_MIGRATIONS** == False (default)
 
 Existing SQL migrations will be run when the database is recreated.
 
-**CFG_TEST_SKIP_MIGRATIONS** == True
+#### **CFG_TEST_SKIP_MIGRATIONS** == True
 
 Existing SQL migrations are ingored, even if the database is recreated.
 
-**CFG_TEST_SKIP_FIXTURES** == False (default)
+#### **CFG_TEST_SKIP_FIXTURES** == False (default)
 
 Existing fixtures will be run when the database is recreated.
 
-**CFG_TEST_SKIP_FIXTURES** == True
+#### **CFG_TEST_SKIP_FIXTURES** == True
 
 Existing fixtures are ingored, even if the database is recreated.
 
