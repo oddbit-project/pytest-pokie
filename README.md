@@ -125,6 +125,18 @@ tests/
     test_something.py  
 ```
 
+test_something.py:
+```python
+
+def test_example_1(pokie_app, pokie_di):
+    assert pokie_app is not None
+    assert pokie_app.di == pokie_di
+
+def test_example_2(pokie_db, pokie_service_manager):
+    assert pokie_db is not None
+    assert pokie_service_manager is not None
+```
+
 And to run the tests:
 
 ```shell
