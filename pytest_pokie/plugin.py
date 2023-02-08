@@ -160,14 +160,13 @@ def pokie_app(request, pokie_factory):
 def _test_db_connection(app, db_name: str = None):
     cfg = app.di.get(DI_CONFIG)
     db_cfg = {
+        "dbname": "postgres" if db_name is None else db_name,
         "host": cfg.get(CFG_TEST_DB_HOST, "localhost"),
         "port": int(cfg.get(CFG_TEST_DB_PORT, 5432)),
         "user": cfg.get(CFG_TEST_DB_USER, "postgres"),
         "password": cfg.get(CFG_TEST_DB_PASSWORD, ""),
         "sslmode": None if not cfg.get(CFG_TEST_DB_SSL, "1") else "require",
     }
-    if db_name is not None:
-        db_cfg["dbname"] = db_name
     return PgConnection(**db_cfg)
 
 

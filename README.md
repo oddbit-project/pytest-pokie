@@ -6,6 +6,8 @@ The pytest-pokie plugin extracts the pokie-based Flask application from the glob
 of predefined fixtures for pokie structures.
 
 Note: Currently, only PostgreSQL is supported; the configured database user must have database creation/drop privileges;
+The plugin also assumes the user can connect to the database 'postgres', as it is used as the default db for administrative
+operations.
 
 ## configuration parameters
 
