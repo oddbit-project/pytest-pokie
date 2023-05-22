@@ -1,5 +1,9 @@
 # pytest-pokie
 
+[![pypi](https://img.shields.io/pypi/v/pytest-pokie.svg)](https://pypi.org/project/pytest-pokie/)
+[![license](https://img.shields.io/pypi/l/pytest-pokie.svg)](https://git.oddbit.org/OddBit/pytest-pokie/src/branch/master/LICENSE)
+
+
 Pytest plugin to run tests on pokie applications
 
 The pytest-pokie plugin extracts the pokie-based Flask application from the global namespace, and exposes a set
@@ -166,15 +170,16 @@ commands = python3 main.py pytest
 Example requirements-dev.txt:
 
 ```shell
-git+https://git.oddbit.org/OddBit/pokie.git
-git+https://git.oddbit.org/OddBit/pytest-pokie.git
-pytest==7.1.2
+pytest==7.3.1
+pytest-cov==4.0.0
 pytest-testdox==3.0.1
-pytest-cov==3.0.0
-coverage==6.4.4
-flake8==5.0.4
+pokie==0.4.0
+pytest-pokie==0.2.0
+flake8==6.0.0
+flake8_black==0.3.6
+coverage==7.2.5
+tox==4.5.1
 setuptools~=60.0.0
-tox==3.21.4
 ```
 
 Running with tox:

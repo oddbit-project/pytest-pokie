@@ -1,4 +1,4 @@
-git+https://git.oddbit.org/OddBit/rick_db.git
+rick_db>=1.0.0
 setuptools
 pytest
 
