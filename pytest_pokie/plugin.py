@@ -46,12 +46,14 @@ def pokie_factory():
 
     # validate namespace
     if pokie_ns not in sys.modules.keys():
-        raise RuntimeError("Error: cannot find pokie namespace '{}'".format(pokie_ns))
+        raise RuntimeError(f"Error: cannot find pokie namespace '{pokie_ns}'")
 
     app = getattr(sys.modules[pokie_ns], pokie_app)
     # validate object
     if app is None:
-        raise RuntimeError("Error: cannot find flask object '{}' in namespace '{}'".format(pokie_app, pokie_ns))
+        raise RuntimeError(
+            f"Error: cannot find flask object '{pokie_app}' in namespace '{pokie_ns}'"
+        )
 
     # validate factory if exists
     factory = getattr(sys.modules[pokie_ns], pokie_factory)
@@ -143,15 +145,14 @@ def pokie_app(request, pokie_factory):
 
     except Exception as e:
         raise RuntimeError(
-            "Error initializing database; does the test user has database create/drop privileges? Error: {}".format(
-                str(e)))
+            f"Error initializing database; does the test user has database create/drop privileges? Error: {str(e)}"
+        )
 
     yield app
 
     # cleanup
     if not reuse_db:
-        conn = app.di.get(DI_DB)
-        if conn:
+        if conn := app.di.get(DI_DB):
             # redo connection for drop purposes
             conn = _test_db_connection(app)
             conn.metadata().drop_database(test_db)
