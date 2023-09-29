@@ -1,5 +1,5 @@
 # pytest-pokie
---
+
 
 [![pypi](https://img.shields.io/pypi/v/pytest-pokie.svg)](https://pypi.org/project/pytest-pokie/)
 [![license](https://img.shields.io/pypi/l/pytest-pokie.svg)](https://git.oddbit.org/OddBit/pytest-pokie/src/branch/master/LICENSE)
@@ -16,23 +16,23 @@ operations.
 
 ## configuration parameters
 
-| Parameter            | Description                                                         |
-|----------------------|---------------------------------------------------------------------|
-| CFG_TEST_DB_NAME     | PostgreSQL test database name                                       |
-| CFG_TEST_DB_HOST     | PostgreSQL host                                                     |
-| CFG_TEST_DB_PORT     | PostgreSQL port                                                     |
-| CFG_TEST_DB_USER     | PostgreSQL user                                                     |
-| CFG_TEST_DB_PASSWORD | PostgreSQL password                                                 |
-| CFG_TEST_DB_SSL      | if True, enforces SSL                                               |
-| CFG_TEST_MANAGE_DB      | if False, no db is managed via pytest-pokie                         |
-| CFG_TEST_SHARE_CTX      | if False, create a new application instance between tests (default) |
-| CFG_TEST_DB_REUSE | if False, drops and recreates the database between tests (default)  |
-| CFG_TEST_SKIP_MIGRATIONS | if False, runs migrations when creating the database                |
-| CFG_TEST_SKIP_FIXTURES | if False, runs fixtures when creating the database                  |
+| Parameter           | Description                                                         |
+|---------------------|---------------------------------------------------------------------|
+| TEST_DB_NAME     | PostgreSQL test database name                                       |
+| TEST_DB_HOST    | PostgreSQL host                                                     |
+| TEST_DB_PORT    | PostgreSQL port                                                     |
+| TEST_DB_USER    | PostgreSQL user                                                     |
+| TEST_DB_PASSWORD | PostgreSQL password                                                 |
+| TEST_DB_SSL     | if True, enforces SSL                                               |
+| TEST_MANAGE_DB     | if False, no db is managed via pytest-pokie                         |
+| TEST_SHARE_CTX     | if False, create a new application instance between tests (default) |
+| TEST_DB_REUSE | if False, drops and recreates the database between tests (default)  |
+| TEST_SKIP_MIGRATIONS | if False, runs migrations when creating the database                |
+| TEST_SKIP_FIXTURES | if False, runs fixtures when creating the database                  |
 
 ## application lifecycle
 
-#### CFG_TEST_SHARE_CTX
+#### TEST_SHARE_CTX
 
 **False (default)**: Each test is run with a separate application instance; the application is bootstrapped at each test, by using
 the existing application factory.
@@ -47,31 +47,31 @@ Please note: The credentials provided to the test database **must** have enough 
 such as creating and dropping databases.
 
 
-#### CFG_TEST_MANAGE_DB
+#### TEST_MANAGE_DB
 
-**False (default)**: If CFG_TEST_MANAGE_DB is False, database management is completely ignored, and available db connection is the regular
+**False (default)**: If TEST_MANAGE_DB is False, database management is completely ignored, and available db connection is the regular
 application connection. All database test configurations are ignored. With this mode, it is up to the developer to ensure a clean state between database runs.
 
-**True**: If CFG_TEST_MANAGE_DB is True, pytest-pokie will manage the database connection using the available test credentials.
+**True**: If TEST_MANAGE_DB is True, pytest-pokie will manage the database connection using the available test credentials.
 The global database connection is replaced with the test connection, and fixtures and migrations may be executed between
 tests.
 
-#### CFG_TEST_DB_REUSE
+#### TEST_DB_REUSE
 
-**False (default)**: if CFG_TEST_DB_REUSE is False, pytest-pokie will attempt to drop and recreate the test database between each test.
+**False (default)**: if TEST_DB_REUSE is False, pytest-pokie will attempt to drop and recreate the test database between each test.
 
-**True**: if CFG_TEST_DB_REUSE is True, pytest-pokie will not drop the testing database if exists. If it doesn't exist, it
-will attempt to create the database and optionally run migrations and fixtures, depending on CFG_TEST_SKIP_MIGRATIONS and
-CFG_TEST_SKIP_FIXTURES values.
+**True**: if TEST_DB_REUSE is True, pytest-pokie will not drop the testing database if exists. If it doesn't exist, it
+will attempt to create the database and optionally run migrations and fixtures, depending on TEST_SKIP_MIGRATIONS and
+TEST_SKIP_FIXTURES values.
 
 
-#### CFG_TEST_SKIP_MIGRATIONS 
+#### TEST_SKIP_MIGRATIONS 
 
 **False (default)**: Existing SQL migrations will be run when the database is recreated.
 
 **True**: Existing SQL migrations are ingored, even if the database is recreated.
 
-#### CFG_TEST_SKIP_FIXTURES
+#### TEST_SKIP_FIXTURES
 
 **False (default)**:Existing fixtures will be run when the database is recreated.
 
