@@ -3,6 +3,7 @@ import pytest
 import os
 from .constants import *
 from rick_db.conn.pg import PgConnection
+from .client import PokieClient
 
 
 @pytest.hookimpl()
@@ -20,14 +21,14 @@ def pytest_addoption(parser) -> None:
         action="store_true",
         dest="skip_migrations",
         default=False,
-        help="Do not run database migrations"
+        help="Do not run database migrations",
     )
     group.addoption(
         "--no_fixtures",
         action="store_true",
         dest="skip_fixtures",
         default=False,
-        help="Do not run fixtures"
+        help="Do not run fixtures",
     )
 
 
@@ -40,9 +41,9 @@ def pokie_factory():
     application
     """
     # attempt to extract Flask application from the main namespace
-    pokie_ns = os.getenv(POKIE_NAMESPACE, '__main__')
-    pokie_app = os.getenv(POKIE_APP, 'app')
-    pokie_factory = os.getenv(POKIE_FACTORY, 'build_pokie')
+    pokie_ns = os.getenv(POKIE_NAMESPACE, "__main__")
+    pokie_app = os.getenv(POKIE_APP, "app")
+    pokie_factory = os.getenv(POKIE_FACTORY, "build_pokie")
 
     # validate namespace
     if pokie_ns not in sys.modules.keys():
@@ -51,7 +52,11 @@ def pokie_factory():
     app = getattr(sys.modules[pokie_ns], pokie_app)
     # validate object
     if app is None:
-        raise RuntimeError("Error: cannot find flask object '{}' in namespace '{}'".format(pokie_app, pokie_ns))
+        raise RuntimeError(
+            "Error: cannot find flask object '{}' in namespace '{}'".format(
+                pokie_app, pokie_ns
+            )
+        )
 
     # validate factory if exists
     factory = getattr(sys.modules[pokie_ns], pokie_factory)
@@ -96,7 +101,10 @@ def pokie_service_manager(pokie_app):
 
 @pytest.fixture()
 def pokie_client(pokie_app):
-    yield pokie_app.test_client()
+    """
+    Barebones REST client
+    """
+    yield PokieClient(pokie_app.test_client())
 
 
 @pytest.fixture(autouse=True)
@@ -144,7 +152,9 @@ def pokie_app(request, pokie_factory):
     except Exception as e:
         raise RuntimeError(
             "Error initializing database; does the test user has database create/drop privileges? Error: {}".format(
-                str(e)))
+                str(e)
+            )
+        )
 
     yield app
 
@@ -193,10 +203,10 @@ def _init_test_db(app, test_db, reuse_db, skip_migrations, skip_fixtures):
 
     if not db_exists:
         pokie_main = app.di.get(DI_APP)
-        pokie_main.cli_runner('db:init')
+        pokie_main.cli_runner("db:init")
 
         if not skip_migrations:
-            pokie_main.cli_runner('db:update')
+            pokie_main.cli_runner("db:update")
 
         if not skip_fixtures:
-            pokie_main.cli_runner('fixture:run')
+            pokie_main.cli_runner("fixture:run")
