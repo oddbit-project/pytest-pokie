@@ -104,7 +104,8 @@ def pokie_client(pokie_app):
     """
     Barebones REST client
     """
-    yield PokieClient(pokie_app.test_client())
+    with pokie_app.test_client() as client:
+        yield PokieClient(client)
 
 
 @pytest.fixture(autouse=True)
